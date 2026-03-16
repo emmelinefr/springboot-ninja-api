@@ -15,7 +15,7 @@ public class NinjaService {
     }
 
 
-    public NinjaModel crateNinja(NinjaModel ninja) {
+    public NinjaModel createNinja(NinjaModel ninja) {
         return ninjaRepository.save(ninja);
     }
 

@@ -15,24 +15,24 @@ public class MissionService {
     }
 
 
-    public MissionModel createMission(MissionModel mission) {
+    public MissionModel create(MissionModel mission) {
         return missionRepository.save(mission);
     }
 
-    public List<MissionModel> listMissions() {
+    public List<MissionModel> list() {
         return missionRepository.findAll();
     }
 
-    public MissionModel findById(int id) {
+    public MissionModel listById(Integer id) {
         Optional<MissionModel> missionById = missionRepository.findById(id);
         return missionById.orElse(null);
     }
 
-    public void deleteMission(int id) {
+    public void delete(Integer id) {
         missionRepository.deleteById(id);
     }
 
-    public MissionModel updateMission(int id, MissionModel missionModelUpdated) {
+    public MissionModel update(Integer id, MissionModel missionModelUpdated) {
         if (missionRepository.existsById(id)) {
             missionModelUpdated.setId(id);
             return missionRepository.save(missionModelUpdated);

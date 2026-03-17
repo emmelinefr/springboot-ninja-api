@@ -15,27 +15,27 @@ public class MissionController {
     }
 
     @PostMapping("/create")
-    public MissionModel createMission(@RequestBody MissionModel mission) {
-        return missionService.createMission(mission);
+    public MissionModel create(@RequestBody MissionModel mission) {
+        return missionService.create(mission);
     }
 
     @GetMapping("/list")
     public List<MissionModel> listMissions() {
-        return missionService.listMissions();
+        return missionService.list();
     }
 
-    @GetMapping("/findById/{id}")
-    public MissionModel findById(@PathVariable int id) {
-        return missionService.findById(id);
+    @GetMapping("/listById/{id}")
+    public MissionModel listById(@PathVariable Integer id) {
+        return missionService.listById(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteMission(@PathVariable int id) {
-        missionService.deleteMission(id);
+    public void delete(@PathVariable Integer id) {
+        missionService.delete(id);
     }
 
     @PutMapping("/update/{id}")
-    public MissionModel updateMission(@PathVariable int id, @RequestBody MissionModel missionModelUpdated) {
-        return missionService.updateMission(id, missionModelUpdated);
+    public MissionModel update(@PathVariable Integer id, @RequestBody MissionModel missionModelUpdated) {
+        return missionService.update(id, missionModelUpdated);
     }
 }

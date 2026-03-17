@@ -26,19 +26,19 @@ public class NinjaController {
         return ninjaService.listNinjas();
     }
 
-    @GetMapping("/findById/{id}")
-    public NinjaModel findNinjaById(@PathVariable int id) {
-        return ninjaService.findById(id);
+    @GetMapping("/listById/{id}")
+    public NinjaModel listById(@PathVariable Integer id) {
+        return ninjaService.listById(id);
     }
 
-    @DeleteMapping("/deleteNinja/{id}")
-    public void deleteNinja(@PathVariable int id) {
-        ninjaService.deleteNinja(id);
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Integer id) {
+        ninjaService.delete(id);
     }
 
-    @PutMapping("/edit/{id}")
-    public NinjaModel updateNinja(@PathVariable int id, @RequestBody NinjaModel ninjaUpdated) {
-        return ninjaService.updateNinja(id, ninjaUpdated);
+    @PutMapping("/update/{id}")
+    public NinjaModel update(@PathVariable Integer id, @RequestBody NinjaModel ninjaUpdated) {
+        return ninjaService.update(id, ninjaUpdated);
     }
 
 }

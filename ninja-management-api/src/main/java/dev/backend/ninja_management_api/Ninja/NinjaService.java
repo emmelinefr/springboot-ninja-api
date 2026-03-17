@@ -23,16 +23,16 @@ public class NinjaService {
         return ninjaRepository.findAll();
     }
 
-    public NinjaModel findById(int id) {
+    public NinjaModel listById(Integer id) {
         Optional<NinjaModel> ninjaById = ninjaRepository.findById(id);
         return ninjaById.orElse(null);
     }
 
-    public void deleteNinja(int id) {
-        ninjaRepository.findById(id);
+    public void delete(Integer id) {
+        ninjaRepository.deleteById(id);
     }
 
-    public NinjaModel updateNinja(int id, NinjaModel ninjaUpdated) {
+    public NinjaModel update(Integer id, NinjaModel ninjaUpdated) {
         if (ninjaRepository.existsById(id)) {
             ninjaUpdated.setId(id);
             return ninjaRepository.save(ninjaUpdated);

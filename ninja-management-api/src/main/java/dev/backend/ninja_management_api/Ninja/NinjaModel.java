@@ -14,11 +14,12 @@ public class NinjaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int yearsOld;
+    private Integer id;
+    private Integer yearsOld;
     private String name;
     @Column(unique = true)
     private String email;
+    private String rank;
 
     @ManyToOne
     @JoinColumn(name = "mission_id")

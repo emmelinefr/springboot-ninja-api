@@ -1,41 +1,55 @@
 package dev.backend.ninja_management_api.Mission;
 
+import dev.backend.ninja_management_api.Ninja.NinjaMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MissionService {
 
+    private final MissionMapper missionMapper;
+    private final NinjaMapper ninjaMapper;
     private MissionRepository missionRepository;
 
-    public MissionService(MissionRepository missionRepository) {
+    public MissionService(MissionRepository missionRepository, MissionMapper missionMapper, NinjaMapper ninjaMapper) {
         this.missionRepository = missionRepository;
+        this.missionMapper = missionMapper;
+        this.ninjaMapper = ninjaMapper;
     }
 
 
-    public MissionModel create(MissionModel mission) {
-        return missionRepository.save(mission);
+    public MissionDTO create(MissionDTO missionDTO) {
+        MissionModel mission = missionMapper.map(missionDTO);
+        mission = missionRepository.save(mission);
+        return missionMapper.map(mission);
     }
 
-    public List<MissionModel> list() {
-        return missionRepository.findAll();
+    public List<MissionDTO> list() {
+        List<MissionModel> missions = missionRepository.findAll();
+        return missions.stream()
+                .map(missionMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public MissionModel listById(Integer id) {
+    public MissionDTO listById(Integer id) {
         Optional<MissionModel> missionById = missionRepository.findById(id);
-        return missionById.orElse(null);
+        return missionById.map(missionMapper::map).orElse(null);
     }
 
     public void delete(Integer id) {
         missionRepository.deleteById(id);
     }
 
-    public MissionModel update(Integer id, MissionModel missionModelUpdated) {
-        if (missionRepository.existsById(id)) {
-            missionModelUpdated.setId(id);
-            return missionRepository.save(missionModelUpdated);
+    public MissionDTO update(Integer id, MissionDTO missionDTO) {
+        Optional<MissionModel> existingMission = missionRepository.findById(id);
+        if (existingMission.isPresent()) {
+            MissionModel missionUpdated = missionMapper.map(missionDTO);
+            missionUpdated.setId(id);
+            MissionModel missionSaved = missionRepository.save(missionUpdated);
+            return missionMapper.map(missionSaved);
         }
         return null;
     }

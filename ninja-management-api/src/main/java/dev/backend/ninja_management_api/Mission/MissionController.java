@@ -15,17 +15,17 @@ public class MissionController {
     }
 
     @PostMapping("/create")
-    public MissionModel create(@RequestBody MissionModel mission) {
-        return missionService.create(mission);
+    public MissionDTO create(@RequestBody MissionDTO missionDTO) {
+        return missionService.create(missionDTO);
     }
 
     @GetMapping("/list")
-    public List<MissionModel> listMissions() {
+    public List<MissionDTO> listMissions() {
         return missionService.list();
     }
 
     @GetMapping("/listById/{id}")
-    public MissionModel listById(@PathVariable Integer id) {
+    public MissionDTO listById(@PathVariable Integer id) {
         return missionService.listById(id);
     }
 
@@ -35,7 +35,7 @@ public class MissionController {
     }
 
     @PutMapping("/update/{id}")
-    public MissionModel update(@PathVariable Integer id, @RequestBody MissionModel missionModelUpdated) {
-        return missionService.update(id, missionModelUpdated);
+    public MissionDTO update(@PathVariable Integer id, @RequestBody MissionDTO missionDTO) {
+        return missionService.update(id, missionDTO);
     }
 }

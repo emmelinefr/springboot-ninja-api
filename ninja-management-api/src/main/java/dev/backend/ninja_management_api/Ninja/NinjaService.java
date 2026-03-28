@@ -4,38 +4,49 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class NinjaService {
 
     private NinjaRepository ninjaRepository;
+    private NinjaMapper ninjaMapper;
 
-    public NinjaService(NinjaRepository ninjaRepository) {
+    public NinjaService(NinjaRepository ninjaRepository, NinjaMapper ninjaMapper) {
         this.ninjaRepository = ninjaRepository;
+        this.ninjaMapper = ninjaMapper;
     }
 
 
-    public NinjaModel createNinja(NinjaModel ninja) {
-        return ninjaRepository.save(ninja);
+    public NinjaDTO create(NinjaDTO ninjaDTO) {
+        NinjaModel ninja = ninjaMapper.map(ninjaDTO);
+        ninja = ninjaRepository.save(ninja);
+        return ninjaMapper.map(ninja);
     }
 
-    public List<NinjaModel> listNinjas() {
-        return ninjaRepository.findAll();
+    public List<NinjaDTO> list() {
+        List<NinjaModel> ninjas = ninjaRepository.findAll();
+        return ninjas.stream()
+                .map(ninjaMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public NinjaModel listById(Integer id) {
+    public NinjaDTO listById(Integer id) {
         Optional<NinjaModel> ninjaById = ninjaRepository.findById(id);
-        return ninjaById.orElse(null);
+        return ninjaById.map(ninjaMapper::map).orElse(null);
     }
 
     public void delete(Integer id) {
         ninjaRepository.deleteById(id);
     }
 
-    public NinjaModel update(Integer id, NinjaModel ninjaUpdated) {
-        if (ninjaRepository.existsById(id)) {
+    public NinjaDTO update(Integer id, NinjaDTO ninjaDTO) {
+        Optional<NinjaModel> existingNinja = ninjaRepository.findById(id);
+        if (existingNinja.isPresent()) {
+            NinjaModel ninjaUpdated = ninjaMapper.map(ninjaDTO);
             ninjaUpdated.setId(id);
-            return ninjaRepository.save(ninjaUpdated);
+            NinjaModel ninjaSaved = ninjaRepository.save(ninjaUpdated);
+            return ninjaMapper.map(ninjaSaved);
         }
         return null;
     }

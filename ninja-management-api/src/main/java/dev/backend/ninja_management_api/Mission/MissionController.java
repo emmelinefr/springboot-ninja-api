@@ -1,5 +1,9 @@
 package dev.backend.ninja_management_api.Mission;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,21 +20,52 @@ public class MissionController {
         this.missionService = missionService;
     }
 
+
+
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody MissionDTO missionDTO) {
+    @Operation(
+            summary = "Create a new mission",
+            description = "Creates a new mission with the provided data"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Mission created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
+    public ResponseEntity<String> create(
+            @Parameter(description = "Mission data to be created")
+            @RequestBody MissionDTO missionDTO) {
+
         MissionDTO newMission = missionService.create(missionDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Successfully created mission: " + newMission.getName());
     }
 
     @GetMapping("/list")
+    @Operation(
+            summary = "List all missions",
+            description = "Returns a complete list of all registered missions"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Missions listed successfully")
+    })
     public ResponseEntity<List<MissionDTO>> listMissions() {
         List<MissionDTO> missions = missionService.list();
         return ResponseEntity.ok(missions);
     }
 
     @GetMapping("/listById/{id}")
-    public ResponseEntity<MissionDTO> listById(@PathVariable Integer id) {
+    @Operation(
+            summary = "Get mission by ID",
+            description = "Returns a mission based on the provided ID"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Mission found successfully"),
+            @ApiResponse(responseCode = "404", description = "Mission not found")
+    })
+    public ResponseEntity<MissionDTO> listById(
+            @Parameter(description = "ID of the mission to be searched")
+            @PathVariable Integer id) {
+
         MissionDTO mission = missionService.listById(id);
         if (mission != null) {
             return ResponseEntity.ok(mission);
@@ -40,7 +75,18 @@ public class MissionController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    @Operation(
+            summary = "Delete mission by ID",
+            description = "Deletes a mission based on the provided ID"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Mission deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Mission not found")
+    })
+    public ResponseEntity<String> delete(
+            @Parameter(description = "ID of the mission to be deleted")
+            @PathVariable Integer id) {
+
         if (missionService.listById(id) != null) {
             missionService.delete(id);
             return ResponseEntity.ok("Mission with ID " + id + " successfully deleted!");
@@ -50,7 +96,21 @@ public class MissionController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<MissionDTO> update(@PathVariable Integer id, @RequestBody MissionDTO missionDTO) {
+    @Operation(
+            summary = "Update mission by ID",
+            description = "Updates an existing mission based on the provided ID and request body data"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Mission updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Mission not found")
+    })
+    public ResponseEntity<MissionDTO> update(
+            @Parameter(description = "ID of the mission provided in the path")
+            @PathVariable Integer id,
+
+            @Parameter(description = "Updated mission data sent in the request body")
+            @RequestBody MissionDTO missionDTO) {
+
         MissionDTO mission = missionService.update(id, missionDTO);
         if (mission != null) {
             return ResponseEntity.ok(mission);

@@ -39,7 +39,7 @@ public class NinjaService {
     public void delete(Integer id) {
         ninjaRepository.deleteById(id);
     }
-
+/*
     public NinjaDTO update(Integer id, NinjaDTO ninjaDTO) {
         Optional<NinjaModel> existingNinja = ninjaRepository.findById(id);
         if (existingNinja.isPresent()) {
@@ -50,4 +50,39 @@ public class NinjaService {
         }
         return null;
     }
+*/
+
+    public NinjaDTO partialUpdate(Integer id, NinjaDTO ninjaDTO) {
+        Optional<NinjaModel> existingNinja = ninjaRepository.findById(id);
+        if (existingNinja.isEmpty()) {
+            return null;
+        }
+
+        NinjaModel entity = existingNinja.get();
+
+        if (ninjaDTO.getName() != null) {
+           entity.setName(ninjaDTO.getName());
+        }
+
+        if (ninjaDTO.getEmail() != null) {
+            entity.setEmail(ninjaDTO.getEmail());
+        }
+
+        if (ninjaDTO.getRank() != null) {
+            entity.setRank(ninjaDTO.getRank());
+        }
+
+        if (ninjaDTO.getMission() != null) {
+            entity.setMission(ninjaDTO.getMission());
+        }
+
+        if (ninjaDTO.getYearsOld() != null) {
+            entity.setYearsOld(ninjaDTO.getYearsOld());
+        }
+
+        NinjaModel saved = ninjaRepository.save(entity);
+
+        return ninjaMapper.map(saved);
+    }
+
 }

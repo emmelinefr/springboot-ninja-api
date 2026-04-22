@@ -43,6 +43,7 @@ public class MissionService {
         missionRepository.deleteById(id);
     }
 
+    /*
     public MissionDTO update(Integer id, MissionDTO missionDTO) {
         Optional<MissionModel> existingMission = missionRepository.findById(id);
         if (existingMission.isPresent()) {
@@ -52,5 +53,25 @@ public class MissionService {
             return missionMapper.map(missionSaved);
         }
         return null;
+    }
+     */
+
+    public MissionDTO partialUpdate(Integer id, MissionDTO missionDTO) {
+        Optional<MissionModel> existingMission = missionRepository.findById(id);
+        if (existingMission.isEmpty()) {
+            return null;
+        }
+
+        MissionModel entity = existingMission.get();
+
+        if (missionDTO.getName() != null) {
+            entity.setName(missionDTO.getName());
+        }
+
+        if(missionDTO.getDifficult() != null) {
+            entity.setDifficult(missionDTO.getDifficult());
+        }
+
+        return missionMapper.map(missionRepository.save(entity));
     }
 }

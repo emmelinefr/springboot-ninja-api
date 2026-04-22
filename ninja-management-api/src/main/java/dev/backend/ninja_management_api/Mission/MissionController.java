@@ -94,7 +94,7 @@ public class MissionController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("The mission with ID " + id + " was not found!");
     }
-
+/*
     @PutMapping("/update/{id}")
     @Operation(
             summary = "Update mission by ID",
@@ -112,6 +112,32 @@ public class MissionController {
             @RequestBody MissionDTO missionDTO) {
 
         MissionDTO mission = missionService.update(id, missionDTO);
+        if (mission != null) {
+            return ResponseEntity.ok(mission);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+ */
+
+    @PatchMapping("update/{id}")
+    @Operation(
+            summary = "Partially update a mission by ID",
+            description = "Updates specific fields of a mission. Only non-null fields will be updated")
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Mission updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Mission not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid request data")
+    })
+    public ResponseEntity<MissionDTO> partialUpdate(
+            @Parameter(description = "ID of the mission to be updated")
+            @PathVariable Integer id,
+
+            @Parameter(description = "Mission fields to update (partial JSON)")
+            @RequestBody MissionDTO missionDTO) {
+        MissionDTO mission = missionService.partialUpdate(id, missionDTO);
+
         if (mission != null) {
             return ResponseEntity.ok(mission);
         } else {

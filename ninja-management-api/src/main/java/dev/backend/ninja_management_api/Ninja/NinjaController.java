@@ -91,7 +91,7 @@ public class NinjaController {
                     .body("The ninja with ID " + id + " was not found!");
         }
     }
-
+/*
     @PutMapping("/update/{id}")
     @Operation(
             summary = "Change the ninja by ID",
@@ -113,5 +113,31 @@ public class NinjaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+*/
+
+    @PatchMapping("/update/{id}")
+    @Operation(
+            summary = "Partially update the ninja by ID",
+            description = "Updates specific fields of a ninja based on the provided ID"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ninja updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Ninja not found")
+    })
+    public ResponseEntity<NinjaDTO> partialUpdate(
+            @Parameter(description = "ID of the ninja")
+            @PathVariable Integer id,
+            @Parameter(description = "Fields to update (partial)")
+            @RequestBody NinjaDTO ninjaDTO){
+
+        NinjaDTO ninja = ninjaService.partialUpdate(id, ninjaDTO);
+
+        if (ninja != null) {
+            return ResponseEntity.ok(ninja);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 
 }
